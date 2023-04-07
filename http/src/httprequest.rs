@@ -85,7 +85,7 @@ fn process_req_line(s:&str)->(Method,Resource,Version){
     let method=words.next().unwrap();
     let resource=words.next().unwrap();
     let version=words.next().unwrap();
-
+    //因为为Method和Version实现了From trait，所以可以直接使用into()方法
     (method.into(),Resource::Path(resource.to_string()),version.into())
 }
 

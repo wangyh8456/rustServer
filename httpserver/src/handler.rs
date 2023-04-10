@@ -13,6 +13,7 @@ pub trait Handler {
         let full_path=format!("{}/{}",public_path,file_name);
 
         let contents=fs::read_to_string(full_path);
+        //将contents从Result<String,io::Error>转换为Option<String>
         contents.ok()
     }
 }
@@ -36,8 +37,8 @@ impl Handler for PageNotFoundHandler {
 
 impl Handler for StaticPageHandler {
     fn handle(req: &HttpRequest) -> HttpResponse {
-        let http::httprequest::Resource::Path(s)=&req.resource;
-        let route:Vec<&str>=s.split("/").collect();
+        let http::httprequest::Resource::Path(path)=&req.resource;
+        let route:Vec<&str>=path.split("/").collect();
         match route[1]{
             ""=>HttpResponse::new("200",None,Self::load_file("index.html")),
             "health"=>HttpResponse::new("200",None,Self::load_file("health.html")),
